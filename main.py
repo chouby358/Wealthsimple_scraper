@@ -54,7 +54,7 @@ if __name__ == "__main__":
     window_height = screen_height
     options = webdriver.ChromeOptions()
     options.add_argument(f"window-size={window_width},{window_height}")
-    options.add_argument(f"window-position={screen_width},0")
+    #options.add_argument(f"window-position={screen_width},0")
     dataDir = f"/home/{getpass.getuser()}/.config/chromium"
     if not os.path.isdir(dataDir):
         dataDir = f"/home/{getpass.getuser()}/.config/google-chrome"
@@ -90,6 +90,17 @@ if __name__ == "__main__":
         amount.click()
         time.sleep(1)
         details_div = amount.find_element(By.XPATH, "../../../../../div")
+
+        # Wait until the "Order" filter button is clickable
+        order_filter_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "/html/body/div[1]/ws-card-loading-indicator/div/div/div[2]/div/ng-transclude/div/layout/div/div/react-router/span/div[3]/div[2]/main/div/div[2]/div[2]/div[2]/div/div[3]/div[2]/div/div/button[2]/div")
+            )
+        )
+
+        # Click the button
+        order_filter_button.click()
+
         try:
             date = convert_datetime(details_div.find_element(By.XPATH, "//p[text() = 'Date']/../div/div/p").text).isoformat()
         except:
